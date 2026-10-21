@@ -35,7 +35,7 @@ class Client extends ApiClient
      * @throws \Dcg\Config\Exception\ConfigFileNotFoundException
      * @throws \Dcg\Config\Exception\ConfigValueNotFoundException
      */
-    public function __construct(array $apiClientConfig = [], \Dcg\Client\MembershipNumber\Config $membershipNumberClientConfig = null)
+    public function __construct(array $apiClientConfig = [], ?\Dcg\Client\MembershipNumber\Config $membershipNumberClientConfig = null)
     {
         parent::__construct($apiClientConfig);
 
