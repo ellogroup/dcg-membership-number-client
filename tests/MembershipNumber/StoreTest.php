@@ -5,6 +5,7 @@ use Dcg\Client\MembershipNumber\Config;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
 class StoreTest extends TestCase
@@ -12,16 +13,14 @@ class StoreTest extends TestCase
 
     protected $config = null;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
         $this->config = Config::getInstance(__DIR__.'/../../config.php');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function does_client_return_success()
     {
         $mock = new MockHandler([
@@ -39,15 +38,11 @@ class StoreTest extends TestCase
         $this->assertEquals(true, $client->store($toCreate));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function does_client_throw_exception_for_invalid_input()
     {
-        $this->setExpectedException(
-            '\\Dcg\\Client\\MembershipNumber\\Exception\\MembershipNumberException',
-            'Invalid data passed into store'
-        );
+        $this->expectException(\Dcg\Client\MembershipNumber\Exception\MembershipNumberException::class);
+        $this->expectExceptionMessage('Invalid data passed into store');
         $client = new Client([], $this->config);
 
         $toCreate = [
@@ -58,9 +53,7 @@ class StoreTest extends TestCase
         $this->assertEquals(true, $client->store($toCreate));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function does_client_handle_500_error()
     {
         $mock = new MockHandler([
@@ -70,10 +63,8 @@ class StoreTest extends TestCase
 
         $client = new Client(['handler' => $handler], $this->config);
 
-        $this->setExpectedException(
-            '\\Dcg\\Client\\MembershipNumber\\Exception\\MembershipNumberException',
-            'Unable to store membership numbers'
-        );
+        $this->expectException(\Dcg\Client\MembershipNumber\Exception\MembershipNumberException::class);
+        $this->expectExceptionMessage('Unable to store membership numbers');
 
         $toCreate = [
             ['membership_number' => '888888', 'brand' => 'TC'],
